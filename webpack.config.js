@@ -55,8 +55,9 @@ module.exports = {
     resolve: {
         alias: {
             '@components': path.resolve('src', 'components'),
-            '@js': path.resolve('src', 'js'),
+            '@enums': path.resolve('src', 'js', 'enums'),
             '@img': path.resolve('src', 'img'),
+            '@js': path.resolve('src', 'js'),
             '@labyrinth': path.resolve('src', 'js', 'labyrinth')
         },
         extensions: ['.vue', '.js', '.svg']

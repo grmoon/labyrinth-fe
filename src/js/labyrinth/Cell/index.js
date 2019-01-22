@@ -1,13 +1,19 @@
-import Direction from '@labyrinth/Direction';
+import Direction from '@enums/Direction';
 
 export default class Cell {
     constructor() {
         this.occupant = undefined;
         this.neighbors = {}
+        this.access = {};
 
-        Object.values(Direction).forEach((direction) => {
+        for (let direction of Direction) {
             this.neighbors[direction] = undefined;
-        });
+            this.access[direction] = false;
+        }
+    }
+
+    canAccess(direction) {
+        return this.access[direction];
     }
 
     getOccupant() {
@@ -29,28 +35,28 @@ export default class Cell {
 
     setLeftNeighbor(neighbor) {
         return this.setNeighbor({
-            direction: Direction.LEFT,
+            direction: Direction.left,
             neighbor
         });
     }
 
     setRightNeighbor(neighbor) {
         return this.setNeighbor({
-            direction: Direction.RIGHT,
+            direction: Direction.right,
             neighbor
         });
     }
 
     setTopNeighbor(neighbor) {
         return this.setNeighbor({
-            direction: Direction.UP,
+            direction: Direction.up,
             neighbor
         });
     }
 
     setBottomNeighbor(neighbor) {
         return this.setNeighbor({
-            direction: Direction.DOWN,
+            direction: Direction.down,
             neighbor
         });
     }
@@ -64,5 +70,9 @@ export default class Cell {
 
     getNeighbor(direction) {
         return this.neighbors[direction];
+    }
+
+    getNeighbors() {
+        return this.neighbors;
     }
 }

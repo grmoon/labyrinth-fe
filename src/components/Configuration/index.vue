@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import RouteName from '@enums/RouteName';
+
 export default {
     data() {
         return {
@@ -53,7 +55,7 @@ export default {
               numRows: this.numRows
             }).then(_ => {
               this.$store.commit('addOccupant', { name: this.occupantName });
-              this.$router.push({ name: 'labyrinth' });
+              this.$router.push({ name: RouteName.labyrinth });
             });
         }
     }

@@ -1,4 +1,4 @@
-import Direction from '@labyrinth/Direction';
+import Direction from '@enums/Direction';
 
 export default class Occupant {
     constructor({ name }) {
@@ -15,27 +15,27 @@ export default class Occupant {
     }
 
     moveLeft() {
-        return this.move(Direction.LEFT);
+        return this.move(Direction.left);
     }
 
     moveRight() {
-        return this.move(Direction.RIGHT);
+        return this.move(Direction.right);
     }
 
     moveUp() {
-        return this.move(Direction.UP);
+        return this.move(Direction.up);
     }
 
     moveDown() {
-        return this.move(Direction.DOWN);
+        return this.move(Direction.down);
     }
 
     move(direction) {
-        const neighbor = this.cell.getNeighbor(direction);
-
-        if (neighbor === undefined) {
+        if (!this.cell.canAccess(direction)) {
             throw new Error(`Cannot move ${direction}.`);
         }
+
+        const neighbor = this.cell.getNeighbor(direction);
 
         this.cell.removeOccupant();
         neighbor.setOccupant(this);

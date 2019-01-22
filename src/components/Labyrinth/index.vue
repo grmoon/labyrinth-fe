@@ -4,7 +4,7 @@
     :style="`grid-template-areas: '${style.gridTemplateAreas}';`"
   >
     <template
-      v-for="(row, rowIdx) in labyrinth.getGrid()"
+      v-for="(row, rowIdx) in labyrinth.asArray()"
     >
       <Cell
         v-for="(cell, cellIdx) in row"
@@ -19,23 +19,25 @@
 $cell-dimension: 10em;
 
 .labyrinth {
+  border: 1px solid black;
   display: grid;
-  grid-auto-rows: $cell-dimension;
   grid-auto-columns: $cell-dimension;
+  grid-auto-rows: $cell-dimension;
+  width: fit-content;
 }
 </style>
 
 
 <script>
-import Direction from '@labyrinth/Direction';
 import Cell from '@components/Cell';
+import Direction from '@enums/Direction';
 import { mapState } from 'vuex';
 
-const directionKeyMap = {
-  UP: 38,
-  DOWN: 40,
-  LEFT: 37,
-  RIGHT: 39
+const DirectionKeyMap = {
+  up: 38,
+  down: 40,
+  left: 37,
+  right: 39
 }
 
 export default {
@@ -56,17 +58,17 @@ export default {
         let direction;
 
         switch (keyCode) {
-          case directionKeyMap.UP:
-            direction = Direction.UP;
+          case DirectionKeyMap.up:
+            direction = Direction.up;
             break;
-          case directionKeyMap.DOWN:
-            direction = Direction.DOWN;
+          case DirectionKeyMap.down:
+            direction = Direction.down;
             break;
-          case directionKeyMap.LEFT:
-            direction = Direction.LEFT;
+          case DirectionKeyMap.left:
+            direction = Direction.left;
             break;
-          case directionKeyMap.RIGHT:
-            direction = Direction.RIGHT;
+          case DirectionKeyMap.right:
+            direction = Direction.right;
             break;
         }
 
