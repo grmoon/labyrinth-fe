@@ -19,19 +19,19 @@
     justify-content: center;
     width: 100%;
 
-    &.cell--up-inaccessible {
+    &--up-inaccessible {
         border-top: 1px solid black;
     }
 
-    &.cell--left-inaccessible {
+    &--left-inaccessible {
         border-left: 1px solid black;
     }
 
-    &.cell--down-inaccessible {
+    &--down-inaccessible {
         border-bottom: 1px solid black;
     }
 
-    &.cell--right-inaccessible {
+    &--right-inaccessible {
         border-right: 1px solid black;
     }
 }

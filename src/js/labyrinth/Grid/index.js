@@ -6,8 +6,8 @@ export default class Grid {
         numCols,
         numRows
     }) {
-        this.numCols = numCols;
-        this.numRows = numRows;
+        this.numCols = parseInt(numCols);
+        this.numRows = parseInt(numRows);
 
         this.build();
         this.link();

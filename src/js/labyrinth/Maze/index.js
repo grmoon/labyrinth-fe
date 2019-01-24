@@ -32,11 +32,11 @@ export default class Maze extends Grid {
     }
 
     selectStart() {
-        const distancesFromEnd = this.findDistancesFrom(this.end);
+        this.distancesFromEnd = this.findDistancesFrom(this.end);
         let maxDist = Number.MIN_SAFE_INTEGER;
         this.cellsByDistanceFromEnd = new Map();
 
-        distancesFromEnd.forEach((dist, cell) => {
+        this.distancesFromEnd.forEach((dist, cell) => {
             if (dist > maxDist) {
                 maxDist = dist;
             }
@@ -126,6 +126,9 @@ export default class Maze extends Grid {
             const neighbors = cell.getNeighbors();
 
             for (let direction in neighbors) {
+                if (!cell.canAccess(direction)) {
+                    continue;
+                }
                 const neighbor = neighbors[direction];
                 const alt = dist.get(cell) + 1;
 

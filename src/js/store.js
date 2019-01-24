@@ -24,10 +24,16 @@ export default new Vuex.Store({
     },
     actions: {
         createLabyrinth({ commit }, labyrinthParams) {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
                 const labyrinth = new Labyrinth(labyrinthParams);
 
-                commit('setLabyrinth', labyrinth);
+                try {
+                    commit('setLabyrinth', labyrinth);
+                }
+                catch (err) {
+                    return reject(err);
+                }
+
                 resolve(labyrinth);
             });
         }
