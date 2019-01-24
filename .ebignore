@@ -1,10 +1,5 @@
 test/
-src/
 node_modules/
-.babelrc.js
-.eslintrc.js
+venv/
 .gitignore
 .nvmrc
-package*.json
-postcss.config.js
-webpack.config.js
