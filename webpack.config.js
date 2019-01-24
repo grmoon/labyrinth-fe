@@ -2,10 +2,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const mode = process.NODE_ENV == 'production' ? 'development' : 'production';
 
 module.exports = {
     devtool: 'source-map',
-    mode: 'development',
+    mode,
     entry: {
         'app': path.resolve('src', 'index')
     },
