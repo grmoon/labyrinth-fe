@@ -62,21 +62,22 @@ export default class Maze extends Grid {
         const path = [this.end];
         const cells = [this.end];
         const visited = [this.end];
+        const cellAccess = new Map();
 
         while (cells.length > 0) {
             const cell = cells.pop();
-            const neighbors = cell.getNeighbors();
-            const unvisitedNeighbors = [];
+            const neighborIds = cell.getNeighborIds();
+            const unvisitedNeighborDirections = [];
 
-            for (let direction in neighbors) {
-                const neighbor = neighbors[direction];
+            for (let direction in neighborIds) {
+                const neighborId = neighborIds[direction];
 
-                if (neighbor !== undefined && !visited.includes(neighbor)) {
-                    unvisitedNeighbors.push(direction);
+                if (!visited.includes(neighborId)) {
+                    unvisitedNeighborDirections.push(direction);
                 }
             }
 
-            if (unvisitedNeighbors.length === 0) {
+            if (unvisitedNeighborDirections.length === 0) {
                 if (path.length > 0) {
                     cells.push(path.pop());
                 }
@@ -84,17 +85,38 @@ export default class Maze extends Grid {
                 continue;
             }
 
-            const randIdx = getRandomIntInRange(0, unvisitedNeighbors.length);
-            const direction = unvisitedNeighbors[randIdx];
-            const neighbor = neighbors[direction];
+            const randIdx = getRandomIntInRange(0, unvisitedNeighborDirections.length);
+            const direction = unvisitedNeighborDirections[randIdx];
+            const oppositeDirection = Direction.opposite(direction);
+            const neighbor = this.getNeighbor(cell, direction);
 
-            neighbor.access[Direction.opposite(direction)] = true;
-            cell.access[direction] = true;
+            if (!cellAccess.has(neighbor)) {
+                cellAccess.set(neighbor, {});
+            }
 
-            visited.push(neighbor);
+            const neighborCellAccess = cellAccess.get(neighbor);
+
+            if (!cellAccess.has(cell)) {
+                cellAccess.set(cell, {});
+            }
+
+            const currentCellAccess = cellAccess.get(cell);
+
+            neighborCellAccess[oppositeDirection] = true;
+            currentCellAccess[direction] = true;
+
+            visited.push(neighbor.id);
             cells.push(neighbor);
             path.push(neighbor);
         }
+
+        cellAccess.forEach((access, cell) => {
+            for (let direction in cell.getNeighborIds()) {
+                if (!access[direction]) {
+                    delete cell.removeNeighborId(direction);
+                }
+            }
+        });
     }
 
     findDistancesFrom(source) {
@@ -123,7 +145,7 @@ export default class Maze extends Grid {
             const cellIdx = cells.indexOf(cell);
             cells.splice(cellIdx, 1);
 
-            const neighbors = cell.getNeighbors();
+            const neighbors = this.getNeighbors(cell);
 
             for (let direction in neighbors) {
                 if (!cell.canAccess(direction)) {

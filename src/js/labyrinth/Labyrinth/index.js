@@ -17,6 +17,15 @@ export default class Labyrinth extends Maze {
     }
 
     moveOccupant(direction) {
-        this.occupant.move(direction);
+        const cell = this.occupant.getCell();
+
+        if (!cell.canAccess(direction)) {
+            throw new Error(`Cannot move ${direction}.`);
+        }
+
+        const neighbor = this.getNeighbor(cell, direction);
+
+        cell.removeOccupant();
+        neighbor.setOccupant(this.occupant);
     }
 }

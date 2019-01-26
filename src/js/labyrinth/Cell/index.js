@@ -1,19 +1,15 @@
 import Direction from '@enums/Direction';
+let count = 0;
 
 export default class Cell {
     constructor() {
         this.occupant = undefined;
-        this.neighbors = {}
-        this.access = {};
-
-        for (let direction of Direction) {
-            this.neighbors[direction] = undefined;
-            this.access[direction] = false;
-        }
+        this.neighborIds = {}
+        this.id = count++;
     }
 
     canAccess(direction) {
-        return this.access[direction];
+        return this.neighborIds[direction] !== undefined;
     }
 
     getOccupant() {
@@ -33,46 +29,50 @@ export default class Cell {
         this.occupant.setCell(this);
     }
 
-    setLeftNeighbor(neighbor) {
-        return this.setNeighbor({
+    setLeftNeighborId(neighborId) {
+        return this.setNeighborId({
             direction: Direction.left,
-            neighbor
+            neighborId
         });
     }
 
-    setRightNeighbor(neighbor) {
-        return this.setNeighbor({
+    setRightNeighborId(neighborId) {
+        return this.setNeighborId({
             direction: Direction.right,
-            neighbor
+            neighborId
         });
     }
 
-    setTopNeighbor(neighbor) {
-        return this.setNeighbor({
+    setTopNeighborId(neighborId) {
+        return this.setNeighborId({
             direction: Direction.up,
-            neighbor
+            neighborId
         });
     }
 
-    setBottomNeighbor(neighbor) {
-        return this.setNeighbor({
+    setBottomNeighborId(neighborId) {
+        return this.setNeighborId({
             direction: Direction.down,
-            neighbor
+            neighborId
         });
     }
 
-    setNeighbor({
+    setNeighborId({
         direction,
-        neighbor
+        neighborId
     }) {
-        this.neighbors[direction] = neighbor;
+        this.neighborIds[direction] = neighborId;
     }
 
-    getNeighbor(direction) {
-        return this.neighbors[direction];
+    removeNeighborId(direction) {
+        delete this.neighborIds[direction];
     }
 
-    getNeighbors() {
-        return this.neighbors;
+    getNeighborId(direction) {
+        return this.neighborIds[direction];
+    }
+
+    getNeighborIds() {
+        return this.neighborIds;
     }
 }

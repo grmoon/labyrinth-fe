@@ -14,20 +14,8 @@ export default class Occupant {
         this.cell = cell;
     }
 
-    moveLeft() {
-        return this.move(Direction.left);
-    }
-
-    moveRight() {
-        return this.move(Direction.right);
-    }
-
-    moveUp() {
-        return this.move(Direction.up);
-    }
-
-    moveDown() {
-        return this.move(Direction.down);
+    getCell() {
+        return this.cell;
     }
 
     move(direction) {

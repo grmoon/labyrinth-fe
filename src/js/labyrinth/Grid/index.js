@@ -8,6 +8,7 @@ export default class Grid {
     }) {
         this.numCols = parseInt(numCols);
         this.numRows = parseInt(numRows);
+        this.cellsById = {};
 
         this.build();
         this.link();
@@ -36,11 +37,57 @@ export default class Grid {
             const topNeighbor = this.grid[rowIdx - 1] ? this.grid[rowIdx - 1][colIdx] || undefined : undefined;
             const bottomNeighbor = this.grid[rowIdx + 1] ? this.grid[rowIdx + 1][colIdx] || undefined : undefined;
 
-            cell.setLeftNeighbor(leftNeighbor);
-            cell.setRightNeighbor(rightNeighbor);
-            cell.setTopNeighbor(topNeighbor);
-            cell.setBottomNeighbor(bottomNeighbor);
+            this.linkCell({
+                cell,
+                topNeighbor,
+                leftNeighbor,
+                bottomNeighbor,
+                rightNeighbor
+            });
         });
+    }
+
+    linkCell({
+        cell,
+        topNeighbor,
+        leftNeighbor,
+        bottomNeighbor,
+        rightNeighbor
+    }) {
+        if (leftNeighbor !== undefined) {
+            cell.setLeftNeighborId(leftNeighbor.id);
+        }
+
+        if (rightNeighbor !== undefined) {
+            cell.setRightNeighborId(rightNeighbor.id);
+        }
+
+        if (topNeighbor !== undefined) {
+            cell.setTopNeighborId(topNeighbor.id);
+        }
+
+        if (bottomNeighbor !== undefined) {
+            cell.setBottomNeighborId(bottomNeighbor.id);
+        }
+    }
+
+    getNeighbors(cell) {
+        const neighbors = {};
+        const neighborIds = cell.getNeighborIds();
+
+        for (let direction in neighborIds) {
+            const neighborId = neighborIds[direction];
+
+            neighbors[direction] = this.cellsById[neighborId];
+        }
+
+        return neighbors;
+    }
+
+    getNeighbor(cell, direction) {
+        const neighborId = cell.getNeighborId(direction);
+
+        return this.cellsById[neighborId];
     }
 
     build() {
@@ -50,7 +97,10 @@ export default class Grid {
             const row = new Row();
 
             for (let colIdx = 0; colIdx < this.numCols; colIdx++) {
-                row.push(new Cell());
+                const cell = new Cell();
+
+                this.cellsById[cell.id] = cell;
+                row.push(cell);
             }
 
             this.grid.push(row);
