@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import Labyrinth from '@labyrinth/Labyrinth';
 import Occupant from '@labyrinth/Occupant';
+import CreateLabyrinthWorker from '@workers/create-labyrinth';
+import Labyrinth from './labyrinth/Labyrinth';
 
 Vue.use(Vuex);
 
@@ -25,16 +26,23 @@ export default new Vuex.Store({
     actions: {
         createLabyrinth({ commit }, labyrinthParams) {
             return new Promise((resolve, reject) => {
-                const labyrinth = new Labyrinth(labyrinthParams);
+                const worker = new CreateLabyrinthWorker();
 
-                try {
-                    commit('setLabyrinth', labyrinth);
-                }
-                catch (err) {
-                    return reject(err);
-                }
+                worker.postMessage(labyrinthParams);
+                worker.onmessage = ({ data: labyrinthObject }) => {
+                    const labyrinth = new Labyrinth({
+                        labyrinthObject
+                    });
 
-                resolve(labyrinth);
+                    try {
+                        commit('setLabyrinth', labyrinth);
+                    }
+                    catch (err) {
+                        return reject(err);
+                    }
+
+                    resolve(labyrinth);
+                }
             });
         }
     }

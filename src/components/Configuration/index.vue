@@ -1,40 +1,48 @@
 <template>
-  <form @submit.prevent="form_onSubmit">
-    <div>
-      <label>
-        Name: <input
-          v-model="occupantName"
-          required
-          type="text"
-          name="occupantName"
-        >
-      </label>
+  <div>
+    <div v-if="generatingLabyrinth">
+      Generating Labyrinth...
     </div>
-    <div>
-      <label>
-        Number of Rows: <input
-          v-model="numRows"
-          required
-          type="number"
-          name="numRows"
-        >
-      </label>
-    </div>
-    <div>
-      <label>
-        Number of Columns: <input
-          v-model="numCols"
-          required
-          type="number"
-          name="numCols"
-        >
-      </label>
-    </div>
-    <input
-      type="submit"
-      value="Generate Labyrinth"
+    <form
+      @submit.prevent="form_onSubmit"
+      v-else
     >
-  </form>
+      <div>
+        <label>
+          Name: <input
+            v-model="occupantName"
+            required
+            type="text"
+            name="occupantName"
+          >
+        </label>
+      </div>
+      <div>
+        <label>
+          Number of Rows: <input
+            v-model="numRows"
+            required
+            type="number"
+            name="numRows"
+          >
+        </label>
+      </div>
+      <div>
+        <label>
+          Number of Columns: <input
+            v-model="numCols"
+            required
+            type="number"
+            name="numCols"
+          >
+        </label>
+      </div>
+      <input
+        type="submit"
+        value="Generate Labyrinth"
+      >
+    </form>
+  </div>
 </template>
 
 <script>
@@ -43,6 +51,7 @@ import RouteName from '@enums/RouteName';
 export default {
     data() {
         return {
+            generatingLabyrinth: false,
             occupantName: 'Emily',
             numCols: 5,
             numRows: 5
@@ -50,6 +59,8 @@ export default {
     },
     methods: {
         form_onSubmit() {
+            this.generatingLabyrinth = true;
+
             this.$store.dispatch('createLabyrinth', {
               numCols: this.numCols,
               numRows: this.numRows
@@ -59,6 +70,8 @@ export default {
             }).catch(err => {
               alert('Invalid number of rows/columns. Try creating a smaller labyrinth.');
               console.error(err);
+            }).finally(_ => {
+              this.generatingLabyrinth = false;
             });
         }
     }

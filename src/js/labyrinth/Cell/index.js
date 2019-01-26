@@ -1,11 +1,13 @@
 import Direction from '@enums/Direction';
-let count = 0;
+import uniqid from 'uniqid';
 
 export default class Cell {
-    constructor() {
-        this.occupant = undefined;
-        this.neighborIds = {}
-        this.id = count++;
+    constructor({
+        cellObject
+    } = {}) {
+        this.occupant = cellObject ? cellObject.occupant : undefined;
+        this.neighborIds = cellObject ? cellObject.neighborIds : {}
+        this.id = cellObject ? cellObject.id : uniqid();
     }
 
     canAccess(direction) {

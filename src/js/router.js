@@ -11,7 +11,11 @@ const routes = [
     {
         name: RouteName.configuration,
         component: Configuration,
-        path: '/configuration'
+        path: '/configuration',
+        beforeEnter(to, from, next) {
+            store.commit('setLabyrinth', undefined);
+            next()
+        }
     },
     {
         name: RouteName.labyrinth,

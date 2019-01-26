@@ -10,17 +10,25 @@ function getRandomIntInRange(min, max) {
 
 export default class Maze extends Grid {
     constructor({
+        mazeObject,
         numCols,
         numRows
     }) {
         super({
+            gridObject: mazeObject,
             numCols,
             numRows
         });
 
-        this.selectEnd();
-        this.buildMaze();
-        this.selectStart();
+        if (mazeObject) {
+            this.end = this.cellsById.get(mazeObject.end.id);
+            this.start = this.cellsById.get(mazeObject.start.id);
+        }
+        else {
+            this.selectEnd();
+            this.buildMaze();
+            this.selectStart();
+        }
     }
 
     getEnd() {
@@ -61,7 +69,7 @@ export default class Maze extends Grid {
     buildMaze() {
         const path = [this.end];
         const cells = [this.end];
-        const visited = [this.end];
+        const visited = [this.end.id];
         const cellAccess = new Map();
 
         while (cells.length > 0) {
@@ -113,7 +121,7 @@ export default class Maze extends Grid {
         cellAccess.forEach((access, cell) => {
             for (let direction in cell.getNeighborIds()) {
                 if (!access[direction]) {
-                    delete cell.removeNeighborId(direction);
+                    cell.removeNeighborId(direction);
                 }
             }
         });

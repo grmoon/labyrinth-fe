@@ -3,15 +3,42 @@ import Row from '@labyrinth/Row';
 
 export default class Grid {
     constructor({
+        gridObject,
         numCols,
         numRows
     }) {
-        this.numCols = parseInt(numCols);
-        this.numRows = parseInt(numRows);
-        this.cellsById = {};
+        this.numCols = parseInt(gridObject ? gridObject.numCols : numCols);
+        this.numRows = parseInt(gridObject ? gridObject.numRows : numRows);
+        this.cellsById = gridObject ? gridObject.cellsById : new Map();
 
-        this.build();
-        this.link();
+        if (gridObject) {
+            this.buildFromGridObject(gridObject);
+        }
+        else {
+            this.build();
+            this.link();
+        }
+    }
+
+    buildFromGridObject(gridObject) {
+        let row = [];
+        this.grid = [];
+
+        this.cellsById.forEach((cellObject, cellId) => {
+            if (row.length % this.numCols == 0 && row.length > 0) {
+                this.grid.push(row);
+                row = [];
+            }
+
+            const cell = new Cell({
+                cellObject
+            });
+
+            this.cellsById.set(cellId, cell);
+            row.push(cell)
+        });
+
+        this.grid.push(row);
     }
 
     forEach(callback) {
@@ -78,7 +105,7 @@ export default class Grid {
         for (let direction in neighborIds) {
             const neighborId = neighborIds[direction];
 
-            neighbors[direction] = this.cellsById[neighborId];
+            neighbors[direction] = this.cellsById.get(neighborId);
         }
 
         return neighbors;
@@ -87,7 +114,7 @@ export default class Grid {
     getNeighbor(cell, direction) {
         const neighborId = cell.getNeighborId(direction);
 
-        return this.cellsById[neighborId];
+        return this.cellsById.get(neighborId);
     }
 
     build() {
@@ -97,9 +124,9 @@ export default class Grid {
             const row = new Row();
 
             for (let colIdx = 0; colIdx < this.numCols; colIdx++) {
-                const cell = new Cell();
+                let cell = new Cell();
 
-                this.cellsById[cell.id] = cell;
+                this.cellsById.set(cell.id, cell);
                 row.push(cell);
             }
 

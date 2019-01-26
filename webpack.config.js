@@ -52,9 +52,20 @@ module.exports = {
             },
             {
                 test: /\.(png|svg|jpg|gif)$/,
+                exclude: /node_modules/,
                 use: [
                     'file-loader'
                 ]
+            },
+            {
+                test: /\.worker\.js$/,
+                exclude: /node_modules/,
+                use: [{
+                    loader: 'worker-loader',
+                    options: {
+                        publicPath: '/'
+                    }
+                }]
             }
         ]
     },
@@ -64,9 +75,10 @@ module.exports = {
             '@enums': path.resolve('src', 'js', 'enums'),
             '@img': path.resolve('src', 'img'),
             '@js': path.resolve('src', 'js'),
-            '@labyrinth': path.resolve('src', 'js', 'labyrinth')
+            '@labyrinth': path.resolve('src', 'js', 'labyrinth'),
+            '@workers': path.resolve('src', 'js', 'workers')
         },
-        extensions: ['.vue', '.js', '.svg']
+        extensions: ['.vue', '.js', '.svg', '.worker.js']
     },
     plugins: [
         new HtmlWebpackPlugin({

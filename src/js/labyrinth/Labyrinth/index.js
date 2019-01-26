@@ -2,10 +2,12 @@ import Maze from '@labyrinth/Maze';
 
 export default class Labyrinth extends Maze {
     constructor({
+        labyrinthObject,
         numCols,
         numRows
     }) {
         super({
+            mazeObject: labyrinthObject,
             numCols,
             numRows
         });
