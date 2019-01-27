@@ -15,5 +15,7 @@ RUN npm run build:prod
 
 FROM nginx
 
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=0 /website/dist /usr/share/nginx/html
+
 EXPOSE 80
