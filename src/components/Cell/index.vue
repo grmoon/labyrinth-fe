@@ -88,7 +88,7 @@ export default {
     },
     mounted() {
         if (this.isEnd) {
-            this.$store.commit('setEndCell', this.$el);
+            this.$store.commit('setEndCellDOM', this.$el);
         }
 
         this.scrollIntoView()
@@ -96,7 +96,7 @@ export default {
     methods: {
         scrollIntoView(isOccupied) {
             if (isOccupied || this.isOccupied) {
-                this.$store.commit('setOccupiedCell', this.$el);
+                this.$store.commit('setOccupiedCellDOM', this.$el);
 
                 setTimeout(_ => {
                     this.$el.scrollIntoView({

@@ -2,8 +2,8 @@
   <div>
     <Compass
       v-if="showCompass"
-      :destination="endCell"
-      :source="occupiedCell"
+      :destination="endCellDOM"
+      :source="occupiedCellDOM"
     />
     <div
       class="labyrinth"
@@ -57,9 +57,9 @@ export default {
         }
       },
       showCompass() {
-        return this.occupiedCell !== undefined && this.endCell !== undefined;
+        return this.occupiedCellDOM !== undefined && this.endCellDOM !== undefined;
       },
-      ...mapState(['labyrinth', 'occupiedCell', 'endCell'])
+      ...mapState(['labyrinth', 'occupiedCellDOM', 'endCellDOM'])
     },
     components: { Cell, Compass },
     methods: {

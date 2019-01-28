@@ -8,9 +8,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        endCell: undefined,
+        endCellDOM: undefined,
         labyrinth: undefined,
-        occupiedCell: undefined
+        occupiedCellDOM: undefined
     },
     mutations: {
         addOccupant(state, occupantParams) {
@@ -18,11 +18,11 @@ export default new Vuex.Store({
 
             state.labyrinth.addOccupant(occupant);
         },
-        setOccupiedCell(state, cell) {
-            state.occupiedCell = cell;
+        setOccupiedCellDOM(state, dom) {
+            state.occupiedCellDOM = dom;
         },
-        setEndCell(state, cell) {
-            state.endCell = cell;
+        setEndCellDOM(state, dom) {
+            state.endCellDOM = dom;
         },
         setLabyrinth(state, labyrinth) {
             state.labyrinth = labyrinth;
