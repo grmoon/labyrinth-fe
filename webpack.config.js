@@ -83,7 +83,9 @@ module.exports = {
         extensions: ['.vue', '.js', '.svg', '.worker.js']
     },
     plugins: [
-        new MiniCssExtractPlugin(),
+        new MiniCssExtractPlugin({
+            filename: '[name].[hash].css'
+        }),
         new HtmlWebpackPlugin({
             template: path.resolve('src', 'html', 'index.html')
         }),
