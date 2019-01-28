@@ -19,20 +19,22 @@
     justify-content: center;
     width: 100%;
 
-    &--up-inaccessible {
-        border-top: 1px solid black;
-    }
+    &.cell {
+        &--up-inaccessible {
+            border-top: 1px solid black;
+        }
 
-    &--left-inaccessible {
-        border-left: 1px solid black;
-    }
+        &--left-inaccessible {
+            border-left: 1px solid black;
+        }
 
-    &--down-inaccessible {
-        border-bottom: 1px solid black;
-    }
+        &--down-inaccessible {
+            border-bottom: 1px solid black;
+        }
 
-    &--right-inaccessible {
-        border-right: 1px solid black;
+        &--right-inaccessible {
+            border-right: 1px solid black;
+        }
     }
 }
 </style>
@@ -84,15 +86,31 @@ export default {
             });
         }
     },
-    watch: {
-        isOccupied(isOccupied) {
-            if (isOccupied) {
-                this.$el.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                    inline: 'center'
+    mounted() {
+        if (this.isEnd) {
+            this.$store.commit('setEndCell', this.$el);
+        }
+
+        this.scrollIntoView()
+    },
+    methods: {
+        scrollIntoView(isOccupied) {
+            if (isOccupied || this.isOccupied) {
+                this.$store.commit('setOccupiedCell', this.$el);
+
+                setTimeout(_ => {
+                    this.$el.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                        inline: 'center'
+                    });
                 });
             }
+        }
+    },
+    watch: {
+        isOccupied(isOccupied) {
+            this.scrollIntoView(isOccupied);
         }
     }
 }

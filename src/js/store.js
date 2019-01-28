@@ -8,13 +8,21 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        labyrinth: undefined
+        endCell: undefined,
+        labyrinth: undefined,
+        occupiedCell: undefined
     },
     mutations: {
         addOccupant(state, occupantParams) {
             const occupant = new Occupant(occupantParams);
 
             state.labyrinth.addOccupant(occupant);
+        },
+        setOccupiedCell(state, cell) {
+            state.occupiedCell = cell;
+        },
+        setEndCell(state, cell) {
+            state.endCell = cell;
         },
         setLabyrinth(state, labyrinth) {
             state.labyrinth = labyrinth;

@@ -1,17 +1,24 @@
 <template>
-  <div
-    class="labyrinth"
-    :style="`grid-template-areas: '${style.gridTemplateAreas}';`"
-  >
-    <template
-      v-for="(row, rowIdx) in labyrinth.asArray()"
+  <div>
+    <Compass
+      v-if="showCompass"
+      :destination="endCell"
+      :source="occupiedCell"
+    />
+    <div
+      class="labyrinth"
+      :style="`grid-template-areas: '${style.gridTemplateAreas}';`"
     >
-      <Cell
-        v-for="(cell, cellIdx) in row"
-        :key="`${rowIdx}-${cellIdx}`"
-        :cell="cell"
-      />
-    </template>
+      <template
+        v-for="(row, rowIdx) in labyrinth.asArray()"
+      >
+        <Cell
+          v-for="(cell, cellIdx) in row"
+          :key="`${rowIdx}-${cellIdx}`"
+          :cell="cell"
+        />
+      </template>
+    </div>
   </div>
 </template>
 
@@ -27,9 +34,9 @@ $cell-dimension: 10em;
 }
 </style>
 
-
 <script>
 import Cell from '@components/Cell';
+import Compass from '@components/Compass';
 import Direction from '@enums/Direction';
 import { mapState } from 'vuex';
 
@@ -49,9 +56,12 @@ export default {
           gridTemplateAreas: new Array(numCols).fill('a').join(' ')
         }
       },
-      ...mapState(['labyrinth']),
+      showCompass() {
+        return this.occupiedCell !== undefined && this.endCell !== undefined;
+      },
+      ...mapState(['labyrinth', 'occupiedCell', 'endCell'])
     },
-    components: { Cell },
+    components: { Cell, Compass },
     methods: {
       movePlayer(keydownEvent) {
         const keyCode = keydownEvent.keyCode;
