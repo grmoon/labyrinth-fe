@@ -26,13 +26,17 @@ export default class Grid {
         }
     }
 
+    get grid() {
+        return this._grid;
+    }
+
     buildFromGridObject() {
         let row = [];
-        this.grid = [];
+        this._grid = [];
 
         this._cellsById.forEach((cellObject, cellId) => {
             if (row.length % this.numCols == 0 && row.length > 0) {
-                this.grid.push(row);
+                this._grid.push(row);
                 row = [];
             }
 
@@ -44,12 +48,12 @@ export default class Grid {
             row.push(cell)
         });
 
-        this.grid.push(row);
+        this._grid.push(row);
     }
 
     forEach(callback) {
         for (let rowIdx = 0; rowIdx < this.numRows; rowIdx++) {
-            const row = this.grid[rowIdx]
+            const row = this._grid[rowIdx]
 
             for (let colIdx = 0; colIdx < this.numCols; colIdx++) {
                 const cell = row[colIdx];
@@ -60,15 +64,15 @@ export default class Grid {
     }
 
     asArray() {
-        return this.grid;
+        return this._grid;
     }
 
     link() {
         this.forEach((cell, row, rowIdx, colIdx) => {
             const leftNeighbor = row[colIdx - 1] || undefined;
             const rightNeighbor = row[colIdx + 1] || undefined;
-            const topNeighbor = this.grid[rowIdx - 1] ? this.grid[rowIdx - 1][colIdx] || undefined : undefined;
-            const bottomNeighbor = this.grid[rowIdx + 1] ? this.grid[rowIdx + 1][colIdx] || undefined : undefined;
+            const topNeighbor = this._grid[rowIdx - 1] ? this._grid[rowIdx - 1][colIdx] || undefined : undefined;
+            const bottomNeighbor = this._grid[rowIdx + 1] ? this._grid[rowIdx + 1][colIdx] || undefined : undefined;
 
             this.linkCell({
                 cell,
@@ -124,7 +128,7 @@ export default class Grid {
     }
 
     build() {
-        this.grid = [];
+        this._grid = [];
 
         for (let rowIdx = 0; rowIdx < this.numRows; rowIdx++) {
             const row = new Row();
@@ -136,12 +140,12 @@ export default class Grid {
                 row.push(cell);
             }
 
-            this.grid.push(row);
+            this._grid.push(row);
         }
     }
 
     get(row, col) {
-        const _row = this.grid[row];
+        const _row = this._grid[row];
 
         return col !== undefined ? _row[col] : _row;
     }

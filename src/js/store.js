@@ -34,9 +34,6 @@ export default new Vuex.Store({
         setLabyrinth(state, labyrinth) {
             state.labyrinth = labyrinth;
         },
-        setOccupiedCell(state, occupiedCell) {
-            state.occupiedCell = occupiedCell;
-        },
         moveOccupant(state, direction) {
             state.occupiedCell = state.labyrinth.moveOccupant(direction);
         }

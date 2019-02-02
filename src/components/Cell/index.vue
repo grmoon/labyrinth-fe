@@ -82,7 +82,7 @@ export default {
     methods: {
         scrollIntoView() {
             if (this.isOccupied) {
-                this.$nextTick(_ => {
+                setTimeout(_ => {
                     this.$el.scrollIntoView({
                         behavior: 'smooth',
                         block: 'center',
