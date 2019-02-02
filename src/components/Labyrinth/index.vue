@@ -50,7 +50,7 @@ const DirectionKeyMap = {
 export default {
     computed: {
       style() {
-        const numCols = this.labyrinth.getNumCols();
+        const numCols = this.labyrinth.numCols;
 
         return {
           gridTemplateAreas: new Array(numCols).fill('a').join(' ')

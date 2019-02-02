@@ -3,22 +3,40 @@ import uniqid from 'uniqid';
 
 export default class Cell {
     constructor({
-        cellObject
+        cellObject = {}
     } = {}) {
-        this.occupant = cellObject ? cellObject.occupant : undefined;
-        this.neighborIds = cellObject ? cellObject.neighborIds : {}
-        this.id = cellObject ? cellObject.id : uniqid();
+        const {
+            _id = uniqid(),
+            _occupant,
+            _neighborIds = {}
+        } = cellObject;
+
+        this._occupant = _occupant;
+        this._neighborIds = _neighborIds;
+        this._id = _id;
     }
 
     canAccess(direction) {
-        return this.neighborIds[direction] !== undefined;
+        return this._neighborIds[direction] !== undefined;
     }
 
-    getOccupant() {
-        return this.occupant;
+    get id() {
+        return this._id;
     }
 
-    isOccupied() {
+    get occupant() {
+        return this._occupant;
+    }
+
+    set occupant(occupant) {
+        this._occupant = occupant;
+
+        if (this.isOccupied) {
+            this.occupant.cell = this;
+        }
+    }
+
+    get isOccupied() {
         return this.occupant !== undefined;
     }
 
@@ -26,33 +44,29 @@ export default class Cell {
         this.occupant = undefined;
     }
 
-    setOccupant(occupant) {
-        this.occupant = occupant;
-        this.occupant.setCell(this);
-    }
 
-    setLeftNeighborId(neighborId) {
+    set leftNeighborId(neighborId) {
         return this.setNeighborId({
             direction: Direction.left,
             neighborId
         });
     }
 
-    setRightNeighborId(neighborId) {
+    set rightNeighborId(neighborId) {
         return this.setNeighborId({
             direction: Direction.right,
             neighborId
         });
     }
 
-    setTopNeighborId(neighborId) {
+    set topNeighborId(neighborId) {
         return this.setNeighborId({
             direction: Direction.up,
             neighborId
         });
     }
 
-    setBottomNeighborId(neighborId) {
+    set bottomNeighborId(neighborId) {
         return this.setNeighborId({
             direction: Direction.down,
             neighborId
@@ -63,18 +77,14 @@ export default class Cell {
         direction,
         neighborId
     }) {
-        this.neighborIds[direction] = neighborId;
+        this._neighborIds[direction] = neighborId;
     }
 
     removeNeighborId(direction) {
-        delete this.neighborIds[direction];
+        return delete this._neighborIds[direction];
     }
 
-    getNeighborId(direction) {
-        return this.neighborIds[direction];
-    }
-
-    getNeighborIds() {
-        return this.neighborIds;
+    get neighborIds() {
+        return Object.assign({}, this._neighborIds);
     }
 }

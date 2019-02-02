@@ -17,8 +17,8 @@
   padding: 0.5em;
   position: fixed;
 
-  &__needle {
-    transition: transform 0.25s;
+  & > &__needle {
+      transition: transform 0.25s;
   }
 }
 </style>

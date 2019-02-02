@@ -64,41 +64,25 @@ export default {
 
         return {
             Dinosaur,
-            classes
+            classes,
         }
     },
     computed: {
         isOccupied() {
-            return this.cell.isOccupied();
+            return this.cell.isOccupied;
         },
         isEnd() {
-            return this.cell === this.labyrinth.getEnd();
+            return this.cell === this.labyrinth.end
         },
         ...mapState(['labyrinth'])
     },
-    updated() {
-        if (this.isEnd && this.isOccupied) {
-            this.$nextTick(_ => {
-                setTimeout(_ => {
-                    alert("Woohoo!");
-                    this.$router.push({ name: RouteName.configuration });
-                }, 0);
-            });
-        }
-    },
     mounted() {
-        if (this.isEnd) {
-            this.$store.commit('setEndCellDOM', this.$el);
-        }
-
-        this.scrollIntoView()
+        this.scrollIntoView();
     },
     methods: {
-        scrollIntoView(isOccupied) {
-            if (isOccupied || this.isOccupied) {
-                this.$store.commit('setOccupiedCellDOM', this.$el);
-
-                setTimeout(_ => {
+        scrollIntoView() {
+            if (this.isOccupied) {
+                this.$nextTick(_ => {
                     this.$el.scrollIntoView({
                         behavior: 'smooth',
                         block: 'center',
@@ -108,10 +92,8 @@ export default {
             }
         }
     },
-    watch: {
-        isOccupied(isOccupied) {
-            this.scrollIntoView(isOccupied);
-        }
+    updated() {
+        this.scrollIntoView();
     }
 }
 </script>

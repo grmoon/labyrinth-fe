@@ -8,9 +8,22 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        endCellDOM: undefined,
         labyrinth: undefined,
-        occupiedCellDOM: undefined
+        occupiedCell: undefined
+    },
+    getters: {
+        getIsGameOver(state) {
+            let isGameOver;
+
+            if (state.labyrinth) {
+                isGameOver = state.occupiedCell === state.labyrinth.end;
+            }
+            else {
+                isGameOver = undefined;
+            }
+
+            return isGameOver;
+        }
     },
     mutations: {
         addOccupant(state, occupantParams) {
@@ -18,17 +31,14 @@ export default new Vuex.Store({
 
             state.labyrinth.addOccupant(occupant);
         },
-        setOccupiedCellDOM(state, dom) {
-            state.occupiedCellDOM = dom;
-        },
-        setEndCellDOM(state, dom) {
-            state.endCellDOM = dom;
-        },
         setLabyrinth(state, labyrinth) {
             state.labyrinth = labyrinth;
         },
+        setOccupiedCell(state, occupiedCell) {
+            state.occupiedCell = occupiedCell;
+        },
         moveOccupant(state, direction) {
-            state.labyrinth.moveOccupant(direction);
+            state.occupiedCell = state.labyrinth.moveOccupant(direction);
         }
     },
     actions: {

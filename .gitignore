@@ -3,6 +3,7 @@ dist/
 venv/
 *.swp
 .DS_Store
+.vscode/
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

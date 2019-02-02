@@ -3,16 +3,22 @@ import Row from '@labyrinth/Row';
 
 export default class Grid {
     constructor({
-        gridObject,
+        gridObject = {},
         numCols,
         numRows
     }) {
-        this.numCols = parseInt(gridObject ? gridObject.numCols : numCols);
-        this.numRows = parseInt(gridObject ? gridObject.numRows : numRows);
-        this.cellsById = gridObject ? gridObject.cellsById : new Map();
+        const {
+            _numCols = numCols,
+            _numRows = numRows,
+            _cellsById = new Map()
+        } = gridObject;
 
-        if (gridObject) {
-            this.buildFromGridObject(gridObject);
+        this._numCols = parseInt(_numCols);
+        this._numRows = parseInt(_numRows);
+        this._cellsById = _cellsById;
+
+        if (Object.keys(gridObject).length > 0) {
+            this.buildFromGridObject();
         }
         else {
             this.build();
@@ -20,11 +26,11 @@ export default class Grid {
         }
     }
 
-    buildFromGridObject(gridObject) {
+    buildFromGridObject() {
         let row = [];
         this.grid = [];
 
-        this.cellsById.forEach((cellObject, cellId) => {
+        this._cellsById.forEach((cellObject, cellId) => {
             if (row.length % this.numCols == 0 && row.length > 0) {
                 this.grid.push(row);
                 row = [];
@@ -34,7 +40,7 @@ export default class Grid {
                 cellObject
             });
 
-            this.cellsById.set(cellId, cell);
+            this._cellsById.set(cellId, cell);
             row.push(cell)
         });
 
@@ -82,39 +88,39 @@ export default class Grid {
         rightNeighbor
     }) {
         if (leftNeighbor !== undefined) {
-            cell.setLeftNeighborId(leftNeighbor.id);
+            cell.leftNeighborId = leftNeighbor.id;
         }
 
         if (rightNeighbor !== undefined) {
-            cell.setRightNeighborId(rightNeighbor.id);
+            cell.rightNeighborId = rightNeighbor.id;
         }
 
         if (topNeighbor !== undefined) {
-            cell.setTopNeighborId(topNeighbor.id);
+            cell.topNeighborId = topNeighbor.id;
         }
 
         if (bottomNeighbor !== undefined) {
-            cell.setBottomNeighborId(bottomNeighbor.id);
+            cell.bottomNeighborId = bottomNeighbor.id;
         }
     }
 
     getNeighbors(cell) {
         const neighbors = {};
-        const neighborIds = cell.getNeighborIds();
+        const neighborIds = cell.neighborIds;
 
         for (let direction in neighborIds) {
             const neighborId = neighborIds[direction];
 
-            neighbors[direction] = this.cellsById.get(neighborId);
+            neighbors[direction] = this._cellsById.get(neighborId);
         }
 
         return neighbors;
     }
 
     getNeighbor(cell, direction) {
-        const neighborId = cell.getNeighborId(direction);
+        const neighborId = cell.neighborIds[direction];
 
-        return this.cellsById.get(neighborId);
+        return this._cellsById.get(neighborId);
     }
 
     build() {
@@ -126,7 +132,7 @@ export default class Grid {
             for (let colIdx = 0; colIdx < this.numCols; colIdx++) {
                 let cell = new Cell();
 
-                this.cellsById.set(cell.id, cell);
+                this._cellsById.set(cell.id, cell);
                 row.push(cell);
             }
 
@@ -140,11 +146,11 @@ export default class Grid {
         return col !== undefined ? _row[col] : _row;
     }
 
-    getNumCols() {
-        return this.numCols;
+    get numCols() {
+        return this._numCols;
     }
 
-    getNumRows() {
-        return this.numRows;
+    get numRows() {
+        return this._numRows;
     }
 }

@@ -1,21 +1,19 @@
-import Direction from '@enums/Direction';
-
 export default class Occupant {
-    constructor({ name }) {
-        this.name = name;
-        this.cell = undefined;
+    constructor({ name: _name }) {
+        this._name = _name;
+        this._cell = undefined;
     }
 
-    getName() {
-        return this.name;
+    get name() {
+        return this._name;
     }
 
-    setCell(cell) {
-        this.cell = cell;
+    set cell(_cell) {
+        this._cell = _cell;
     }
 
-    getCell() {
-        return this.cell;
+    get cell() {
+        return this._cell;
     }
 
     move(direction) {
@@ -26,6 +24,6 @@ export default class Occupant {
         const neighbor = this.cell.getNeighbor(direction);
 
         this.cell.removeOccupant();
-        neighbor.setOccupant(this);
+        neighbor.occupant = this;
     }
 }

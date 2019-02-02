@@ -21,8 +21,8 @@ export default class Maze extends Grid {
         });
 
         if (mazeObject) {
-            this.end = this.cellsById.get(mazeObject.end.id);
-            this.start = this.cellsById.get(mazeObject.start.id);
+            this._end = this._cellsById.get(mazeObject._end._id);
+            this._start = this._cellsById.get(mazeObject._start._id);
         }
         else {
             this.selectEnd();
@@ -31,16 +31,16 @@ export default class Maze extends Grid {
         }
     }
 
-    getEnd() {
-        return this.end;
+    get end() {
+        return this._end;
     }
 
-    getStart() {
-        return this.start;
+    get start() {
+        return this._start;
     }
 
     selectStart() {
-        this.distancesFromEnd = this.findDistancesFrom(this.end);
+        this.distancesFromEnd = this.findDistancesFrom(this._end);
         let maxDist = Number.MIN_SAFE_INTEGER;
         this.cellsByDistanceFromEnd = new Map();
 
@@ -56,25 +56,25 @@ export default class Maze extends Grid {
             this.cellsByDistanceFromEnd.get(dist).push(cell);
         });
 
-        this.start = this.cellsByDistanceFromEnd.get(maxDist)[0];
+        this._start = this.cellsByDistanceFromEnd.get(maxDist)[0];
     }
 
     selectEnd() {
-        const endRow = getRandomIntInRange(0, this.getNumRows());
-        const endCol = getRandomIntInRange(0, this.getNumCols());
+        const endRow = getRandomIntInRange(0, this.numRows);
+        const endCol = getRandomIntInRange(0, this.numCols);
 
-        this.end = this.get(endRow, endCol);
+        this._end = this.get(endRow, endCol);
     }
 
     buildMaze() {
-        const path = [this.end];
-        const cells = [this.end];
-        const visited = [this.end.id];
+        const path = [this._end];
+        const cells = [this._end];
+        const visited = [this._end.id];
         const cellAccess = new Map();
 
         while (cells.length > 0) {
             const cell = cells.pop();
-            const neighborIds = cell.getNeighborIds();
+            const neighborIds = cell.neighborIds;
             const unvisitedNeighborDirections = [];
 
             for (let direction in neighborIds) {
@@ -119,7 +119,7 @@ export default class Maze extends Grid {
         }
 
         cellAccess.forEach((access, cell) => {
-            for (let direction in cell.getNeighborIds()) {
+            for (let direction in cell.neighborIds) {
                 if (!access[direction]) {
                     cell.removeNeighborId(direction);
                 }
