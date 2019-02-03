@@ -1,5 +1,7 @@
 test/
 node_modules/
 venv/
+.vscode/
 .gitignore
 .nvmrc
+.python-version

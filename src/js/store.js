@@ -9,7 +9,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         labyrinth: undefined,
-        occupiedCell: undefined
+        occupiedCell: undefined,
+        endCellDOM: undefined,
+        occupiedCellDOM: undefined
     },
     getters: {
         getIsGameOver(state) {
@@ -30,6 +32,12 @@ export default new Vuex.Store({
             const occupant = new Occupant(occupantParams);
 
             state.labyrinth.addOccupant(occupant);
+        },
+        setEndCellDOM(state, dom) {
+            state.endCellDOM = dom;
+        },
+        setOccupiedCellDOM(state, dom) {
+            state.occupiedCellDOM = dom;
         },
         setLabyrinth(state, labyrinth) {
             state.labyrinth = labyrinth;

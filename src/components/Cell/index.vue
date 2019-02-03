@@ -46,6 +46,7 @@ import Dinosaur from '@img/dinosaur';
 import Direction from '@enums/Direction';
 import RouteName from '@enums/RouteName';
 
+
 export default {
     props: {
         cell: {
@@ -78,10 +79,16 @@ export default {
     },
     mounted() {
         this.scrollIntoView();
+
+        if (this.isEnd) {
+            this.$store.commit('setEndCellDOM', this.$el);
+        }
     },
     methods: {
         scrollIntoView() {
             if (this.isOccupied) {
+                this.$store.commit('setOccupiedCellDOM', this.$el);
+
                 setTimeout(_ => {
                     this.$el.scrollIntoView({
                         behavior: 'smooth',

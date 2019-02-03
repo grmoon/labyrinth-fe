@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <router-link :to="{ name: 'configuration' }">
       Configuration
     </router-link>

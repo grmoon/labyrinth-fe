@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div class="labyrinth-container">
+    <Congratulations v-if="gameOver" />
     <Compass
-      v-if="showCompass"
-      :destination="endCellDOM"
+      v-else-if="shouldShowCompass"
       :source="occupiedCellDOM"
+      :destination="endCellDOM"
     />
     <div
       class="labyrinth"
@@ -25,6 +26,11 @@
 <style lang="scss" scoped>
 $cell-dimension: 10em;
 
+.labyrinth-container {
+  display:inline-block;
+  position: relative;
+}
+
 .labyrinth {
   border: 1px solid black;
   display: grid;
@@ -37,6 +43,7 @@ $cell-dimension: 10em;
 <script>
 import Cell from '@components/Cell';
 import Compass from '@components/Compass';
+import Congratulations from '@components/Congratulations';
 import Direction from '@enums/Direction';
 import { mapState } from 'vuex';
 
@@ -56,13 +63,19 @@ export default {
           gridTemplateAreas: new Array(numCols).fill('a').join(' ')
         }
       },
-      showCompass() {
-        return this.occupiedCellDOM !== undefined && this.endCellDOM !== undefined;
+      gameOver() {
+        return this.endCellDOM === this.occupiedCellDOM;
+      },
+      shouldShowCompass() {
+        return this.endCellDOM !== undefined && this.occupiedCellDOM !== undefined;
       },
       ...mapState(['labyrinth', 'occupiedCellDOM', 'endCellDOM'])
     },
-    components: { Cell, Compass },
+    components: { Cell, Compass, Congratulations},
     methods: {
+      removeEventListener() {
+        document.removeEventListener('keydown', this.movePlayer);
+      },
       movePlayer(keydownEvent) {
         const keyCode = keydownEvent.keyCode;
         let direction;
@@ -88,8 +101,13 @@ export default {
     mounted() {
       document.addEventListener('keydown', this.movePlayer);
     },
+    updated() {
+      if (this.gameOver) {
+        this.removeEventListener();
+      }
+    },
     destroyed() {
-      document.removeEventListener('keydown', this.movePlayer);
+      this.removeEventListener();
     }
 }
 </script>
