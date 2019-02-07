@@ -14,10 +14,15 @@ export default class Cell {
         this._occupant = _occupant;
         this._neighborIds = _neighborIds;
         this._id = _id;
+        this._numVisits = 0;
     }
 
     canAccess(direction) {
         return this._neighborIds[direction] !== undefined;
+    }
+
+    get numVisits() {
+        return this._numVisits;
     }
 
     get id() {
@@ -33,6 +38,7 @@ export default class Cell {
 
         if (this.isOccupied) {
             this.occupant.cell = this;
+            this._numVisits++;
         }
     }
 

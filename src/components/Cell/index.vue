@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes">
+  <div :class="classes" :style="{ backgroundColor }">
     <img
       v-if="isOccupied"
       :src="Dinosaur"
@@ -45,6 +45,7 @@ import Cell from '@labyrinth/Cell';
 import Dinosaur from '@img/dinosaur';
 import Direction from '@enums/Direction';
 import RouteName from '@enums/RouteName';
+import chroma from 'chroma-js';
 
 
 export default {
@@ -64,6 +65,7 @@ export default {
         }
 
         return {
+            backgroundColor: '#f9fbff',
             Dinosaur,
             classes,
         }
@@ -74,6 +76,9 @@ export default {
         },
         isEnd() {
             return this.cell === this.labyrinth.end
+        },
+        numVisits() {
+          return this.cell.numVisits
         },
         ...mapState(['labyrinth'])
     },
@@ -98,6 +103,11 @@ export default {
                 });
             }
         }
+    },
+    watch: {
+      numVisits(newNumVisits) {
+        this.backgroundColor = chroma(this.backgroundColor).darken(.125).hex();
+      }
     },
     updated() {
         this.scrollIntoView();

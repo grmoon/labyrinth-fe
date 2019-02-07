@@ -11,7 +11,7 @@ export default new Vuex.Store({
         labyrinth: undefined,
         occupiedCell: undefined,
         endCellDOM: undefined,
-        occupiedCellDOM: undefined
+        occupiedCellDOM: undefined,
     },
     getters: {
         getIsGameOver(state) {
