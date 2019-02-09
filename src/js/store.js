@@ -4,13 +4,21 @@ import Occupant from '@labyrinth/Occupant';
 import CreateLabyrinthWorker from '@workers/create-labyrinth';
 import Labyrinth from './labyrinth/Labyrinth';
 
+let WS_ACTIONS = {
+  initialize: 'initialize'
+};
+
+let labyrinths;
+
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
     state: {
-        labyrinth: undefined,
-        occupiedCell: undefined,
+        connected: undefined,
         endCellDOM: undefined,
+        labyrinth: undefined,
+        labyrinths: undefined,
+        occupiedCell: undefined,
         occupiedCellDOM: undefined,
     },
     getters: {
@@ -44,18 +52,31 @@ export default new Vuex.Store({
         },
         moveOccupant(state, direction) {
             state.occupiedCell = state.labyrinth.moveOccupant(direction);
+        },
+        setConnected(state, connected) {
+            state.connected = connected;
+        },
+        setLabyrinths(state, labyrinths) {
+            state.labyrinths = labyrinths;
         }
     },
     actions: {
-        createLabyrinth({ commit }, labyrinthParams) {
+        createLabyrinth({ state, commit }, labyrinthParams) {
             return new Promise((resolve, reject) => {
                 const worker = new CreateLabyrinthWorker();
 
                 worker.postMessage(labyrinthParams);
                 worker.onmessage = ({ data: labyrinthObject }) => {
-                    const labyrinth = new Labyrinth({
-                        labyrinthObject
-                    });
+                    if (state.connected) {
+                      const message = {
+                        action: WS_ACTIONS.register,
+                        payload: labyrinthParams
+                      };
+
+                      ws.send(JSON.stringify(message));
+                    }
+
+                    const labyrinth = new Labyrinth({ labyrinthObject });
 
                     try {
                         commit('setLabyrinth', labyrinth);
@@ -70,3 +91,39 @@ export default new Vuex.Store({
         }
     }
 });
+
+const ws = new WebSocket('ws://localhost:8765');
+
+ws.onopen = (evt) => {
+  store.commit('setConnected', true);
+}
+
+ws.onclose = (evt) => {
+  store.commit('setConnected', false);
+}
+
+ws.onerror = (evt) => {
+  store.commit('setConnected', false);
+}
+
+ws.onmessage = (evt) => {
+  const message = JSON.parse(evt.data);
+  console.log('Recieved Message', message);
+
+  const payload = message['payload'];
+  const action = message['action']
+
+  switch(action) {
+    case WS_ACTIONS.initialize:
+    case WS_ACTIONS.refresh:
+      WS_ACTIONS = payload['actions'];
+      store.commit('setLabyrinths', payload['labyrinths']);
+      break;
+    case WS_ACTIONS.register:
+      break;
+    default:
+      throw new Error(`${message.action} is not a valid action.`);
+  }
+}
+
+export default store;

@@ -1,5 +1,8 @@
 <template>
-  <div :class="classes" :style="{ backgroundColor }">
+  <div
+    :class="classes"
+    :style="{ backgroundColor }"
+  >
     <img
       v-if="isOccupied"
       :src="Dinosaur"
