@@ -83,7 +83,18 @@ export default {
     },
     methods: {
         selectForm_onSubmit() {
-          debugger;
+            this.generatingLabyrinth = true;
+
+            this.$store.dispatch('connectToLabyrinth', this.selection).then(_ => {
+              debugger;
+              this.$store.commit('addOccupant', { name: this.occupantName });
+              this.$router.push({ name: RouteName.labyrinth });
+            }).catch(err => {
+              alert('Invalid number of rows/columns. Try creating a smaller labyrinth.');
+              console.error(err);
+            }).finally(_ => {
+              this.generatingLabyrinth = false;
+            });
         },
         generateForm_onSubmit() {
             this.generatingLabyrinth = true;
