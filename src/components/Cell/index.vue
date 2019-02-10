@@ -78,10 +78,13 @@ export default {
             return this.cell.isOccupied;
         },
         isEnd() {
-            return this.cell === this.labyrinth.end
+            return this.cell === this.labyrinth.end;
+        },
+        isStart() {
+            return this.cell === this.labyrinth.start;
         },
         numVisits() {
-          return this.cell.numVisits
+          return this.cell.numVisits;
         },
         ...mapState(['labyrinth'])
     },
@@ -90,6 +93,9 @@ export default {
 
         if (this.isEnd) {
             this.$store.commit('setEndCellDOM', this.$el);
+        }
+        else if (this.isStart) {
+            this.backgroundColor = chroma(this.backgroundColor).darken(.125).hex();
         }
     },
     methods: {

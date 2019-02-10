@@ -20,5 +20,8 @@ module.exports = {
       'eslint:recommended',
       'plugin:vue/strongly-recommended'
     ],
+    globals: {
+        WEBSOCKET_URL: 'readable'
+    },
     rules
 }

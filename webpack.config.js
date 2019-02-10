@@ -2,9 +2,19 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const webpack = require('webpack');
 
 const mode = process.env.NODE_ENV == 'production' ? 'production': 'development';
 const path = require('path');
+
+let WEBSOCKET_URL;
+
+if (mode === 'production') {
+    WEBSOCKET_URL = 'ws://labyrinth-dev.us-east-2.elasticbeanstalk.com:8765';
+}
+else {
+    WEBSOCKET_URL = 'ws://localhost:8765'
+}
 
 module.exports = {
     devtool: mode == 'production' ? '' : 'source-map',
@@ -83,6 +93,9 @@ module.exports = {
         extensions: ['.vue', '.js', '.svg', '.worker.js']
     },
     plugins: [
+        new webpack.DefinePlugin({
+            WEBSOCKET_URL: JSON.stringify(WEBSOCKET_URL)
+        }),
         new MiniCssExtractPlugin({
             filename: '[name].[hash].css'
         }),

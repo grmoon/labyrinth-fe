@@ -121,7 +121,7 @@ const store = new Vuex.Store({
     }
 });
 
-const ws = new WebSocket('ws://localhost:8765');
+const ws = new WebSocket(WEBSOCKET_URL);
 
 ws.onopen = (evt) => {
     store.commit('setConnected', true);
