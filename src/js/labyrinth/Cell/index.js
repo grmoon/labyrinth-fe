@@ -7,11 +7,11 @@ export default class Cell {
     } = {}) {
         const {
             _id = uniqid(),
-            _occupant,
+            _occupantId,
             _neighborIds = {}
         } = cellObject;
 
-        this._occupant = _occupant;
+        this._occupantId = _occupantId;
         this._neighborIds = _neighborIds;
         this._id = _id;
         this._numVisits = 0;
@@ -29,27 +29,25 @@ export default class Cell {
         return this._id;
     }
 
-    get occupant() {
-        return this._occupant;
+    get occupantId() {
+        return this._occupantId;
     }
 
-    set occupant(occupant) {
-        this._occupant = occupant;
+    set occupantId(occupantId) {
+        this._occupantId = occupantId;
 
         if (this.isOccupied) {
-            this.occupant.cell = this;
             this._numVisits++;
         }
     }
 
     get isOccupied() {
-        return this.occupant !== undefined;
+        return this.occupantId !== undefined;
     }
 
     removeOccupant() {
-        this.occupant = undefined;
+        this.occupantId = undefined;
     }
-
 
     set leftNeighborId(neighborId) {
         return this.setNeighborId({

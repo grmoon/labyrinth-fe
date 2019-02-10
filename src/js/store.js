@@ -77,7 +77,6 @@ const store = new Vuex.Store({
 
                 worker.postMessage(labyrinthId);
                 worker.onmessage = ({ data: labyrinthObject }) => {
-                    debugger;
                     const labyrinth = new Labyrinth({ labyrinthObject });
 
                     try {
@@ -153,7 +152,8 @@ ws.onmessage = (evt) => {
             ws.send(JSON.stringify({
                 action: WS_ACTIONS.deliver_labyrinth,
                 payload: {
-                    labyrinth: store.state.labyrinth
+                    labyrinth: store.state.labyrinth,
+                    for: payload['for']
                 }
             }));
             break;

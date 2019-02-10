@@ -10,7 +10,7 @@ export default class Grid {
         const {
             _numCols = numCols,
             _numRows = numRows,
-            _cellsById = new Map()
+            _cellsById = {}
         } = gridObject;
 
         this._numCols = parseInt(_numCols);
@@ -34,7 +34,9 @@ export default class Grid {
         let row = [];
         this._grid = [];
 
-        this._cellsById.forEach((cellObject, cellId) => {
+        Object.keys(this._cellsById).forEach((cellId) => {
+            const cellObject = this._cellsById[cellId];
+
             if (row.length % this.numCols == 0 && row.length > 0) {
                 this._grid.push(row);
                 row = [];
@@ -44,7 +46,7 @@ export default class Grid {
                 cellObject
             });
 
-            this._cellsById.set(cellId, cell);
+            this._cellsById[cellId] = cell;
             row.push(cell)
         });
 
@@ -115,7 +117,7 @@ export default class Grid {
         for (let direction in neighborIds) {
             const neighborId = neighborIds[direction];
 
-            neighbors[direction] = this._cellsById.get(neighborId);
+            neighbors[direction] = this._cellsById[neighborId];
         }
 
         return neighbors;
@@ -124,7 +126,7 @@ export default class Grid {
     getNeighbor(cell, direction) {
         const neighborId = cell.neighborIds[direction];
 
-        return this._cellsById.get(neighborId);
+        return this._cellsById[neighborId];
     }
 
     build() {
@@ -136,7 +138,7 @@ export default class Grid {
             for (let colIdx = 0; colIdx < this.numCols; colIdx++) {
                 let cell = new Cell();
 
-                this._cellsById.set(cell.id, cell);
+                this._cellsById[cell.id] = cell;
                 row.push(cell);
             }
 

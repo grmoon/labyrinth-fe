@@ -40,28 +40,27 @@
           value="Generate Labyrinth"
         >
       </form>
-      <div>OR</div>
-      <form
-        v-if="connected"
-        @submit.prevent="selectForm_onSubmit"
-      >
-        <select
-          required
-          v-model="selection"
-        >
-          <option
-            v-for="(description, key) in labyrinths"
-            :key="key"
-            :value="key"
+      <div v-if="canConnectToLabyrinth">
+        <div>OR</div>
+        <form @submit.prevent="selectForm_onSubmit">
+          <select
+            required
+            v-model="selection"
           >
-            Rows: {{ description.numRows }}, Columns: {{ description.numCols }}
-          </option>
-        </select>
-        <input
-          type="submit"
-          value="Join an Existing Labyrinth"
-        >
-      </form>
+            <option
+              v-for="(description, key) in labyrinths"
+              :key="key"
+              :value="key"
+            >
+              Rows: {{ description.numRows }}, Columns: {{ description.numCols }}
+            </option>
+          </select>
+          <input
+            type="submit"
+            value="Join an Existing Labyrinth"
+          >
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -71,7 +70,12 @@ import RouteName from '@enums/RouteName';
 import { mapState } from 'vuex';
 
 export default {
-    computed: mapState(['labyrinths', 'connected']),
+    computed: {
+      canConnectToLabyrinth() {
+        return this.connected && (this.labyrinths && Object.keys(this.labyrinths).length > 0);
+      },
+      ...mapState(['labyrinths', 'connected']),
+    },
     data() {
         return {
             generatingLabyrinth: false,
@@ -86,7 +90,6 @@ export default {
             this.generatingLabyrinth = true;
 
             this.$store.dispatch('connectToLabyrinth', this.selection).then(_ => {
-              debugger;
               this.$store.commit('addOccupant', { name: this.occupantName });
               this.$router.push({ name: RouteName.labyrinth });
             }).catch(err => {

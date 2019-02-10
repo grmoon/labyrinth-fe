@@ -15,7 +15,8 @@ export default class Labyrinth extends Maze {
 
     addOccupant(occupant) {
         this.occupant = occupant;
-        this.start.occupant = occupant;
+        this.occupant.cell = this.start;
+        this.start.occupantId = occupant.id;
     }
 
     moveOccupant(direction) {
@@ -28,7 +29,8 @@ export default class Labyrinth extends Maze {
         const neighbor = this.getNeighbor(cell, direction);
 
         cell.removeOccupant();
-        neighbor.occupant = this.occupant;
+        neighbor.occupantId = this.occupant.id;
+        this.occupant.cell = neighbor;
 
         return neighbor;
     }

@@ -21,8 +21,8 @@ export default class Maze extends Grid {
         });
 
         if (mazeObject) {
-            this._end = this._cellsById.get(mazeObject._end._id);
-            this._start = this._cellsById.get(mazeObject._start._id);
+            this._end = this._cellsById[mazeObject._end._id];
+            this._start = this._cellsById[mazeObject._start._id];
         }
         else {
             this.selectEnd();

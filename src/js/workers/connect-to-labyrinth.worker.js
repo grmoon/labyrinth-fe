@@ -34,8 +34,7 @@ ws.onmessage = (evt) => {
       WS_ACTIONS = payload['actions'];
       break;
     case WS_ACTIONS.deliver_labyrinth:
-      debugger;
-      console.log(message);
+      self.postMessage(payload['labyrinth']);
       break;
     default:
       throw new Error(`${message.action} is not a valid action.`);

@@ -1,7 +1,13 @@
+import uniqid from 'uniqid';
 export default class Occupant {
     constructor({ name: _name }) {
         this._name = _name;
         this._cell = undefined;
+        this._id = uniqid();
+    }
+
+    get id() {
+        return this._id;
     }
 
     get name() {
