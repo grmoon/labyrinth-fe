@@ -20,6 +20,6 @@ FROM nginx
 COPY --from=0 /website/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-RUN rm -rf website
+RUN rm -rf /website
 
 EXPOSE 80
